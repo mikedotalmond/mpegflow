@@ -80,12 +80,16 @@ void ffmpeg_init()
 			av_dict_set(&opts, "flags2", "+export_mvs", 0);
 			if (!pCodec || avcodec_open2(enc, pCodec, &opts) < 0)
 				throw std::runtime_error("Codec not found or cannot open codec.");
-
+			
 			ffmpeg_videoStreamIndex = i;
 			ffmpeg_pVideoStream = ffmpeg_pFormatCtx->streams[i];
 			ffmpeg_frameWidth = enc->width;
 			ffmpeg_frameHeight = enc->height;
-
+			
+			AVRational framerate = enc->framerate;
+			
+			printf("~ frameWidth=%d frameHeight=%d framerate=%d/%d\n", int(ffmpeg_frameWidth), int(ffmpeg_frameHeight), framerate.num, framerate.den);
+			
 			break;
 		}
 	}
